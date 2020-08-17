@@ -11,16 +11,14 @@ function LandingPage() {
   const [Video, setVideo] = useState([]);
   // get video data from mongoDB
   useEffect(() => {
-    Axios.get('/api/video/getVides').then(response => {
+    Axios.get('/api/video/getVideos').then(response => {
       if (response.data.success) {
+        console.log(response.data);
         setVideo(response.data.videos);
       } else {
         alert('fail to get video from DB');
       }
     });
-    return () => {
-      cleanup;
-    };
   }, []);
 
   const renderCards = Video.map((video, index) => {
@@ -28,10 +26,10 @@ function LandingPage() {
     let seconds = Math.floor(video.duration - minutes * 60);
 
     return (
-      <Col lg={6} md={8} xs={24}>
+      <Col key={index} lg={6} md={8} xs={24}>
         {/* video detail로 가기 위한 link */}
-        <a href={`/video/post/${video._id}`}>
-          <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }}>
+          <a href={`/video/${video._id}`}>
             <img
               style={{ width: '100%' }}
               src={`http://localhost:5000/${video.thumbnail}`}
@@ -42,8 +40,8 @@ function LandingPage() {
                 {minutes} : {seconds}
               </span>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
         <br />
         <Meta
           avater={<Avatar src={video.writer.image} />}

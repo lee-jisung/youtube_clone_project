@@ -3,38 +3,22 @@ const Schema = mongoose.Schema;
 
 // DB Schema 생성
 
-const videoSchema = mongoose.Schema(
+// userFrom -> userTo를 구독하고 있는 DB
+const commentSchema = mongoose.Schema(
   {
     writer: {
-      // User model을 참조해서 모든 정보를 긁어오게 하는 부분
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    title: {
-      type: String,
-      maxlength: 50,
+    videoId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
-    description: {
-      type: String,
+    responseTo: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
-
-    privacy: {
-      type: Number,
-    },
-    filePath: {
-      type: String,
-    },
-    category: {
-      type: String,
-    },
-    views: {
-      type: Number,
-      default: 0,
-    },
-    duration: {
-      type: String,
-    },
-    thumbnail: {
+    content: {
       type: String,
     },
   },
@@ -42,10 +26,10 @@ const videoSchema = mongoose.Schema(
 );
 
 // mongoose model -> schema를 감싸주는 역할
-const Video = mongoose.model('Video', videoSchema);
+const Comment = mongoose.model('Comment', commentSchema);
 
 // Video model export
-module.exports = { Video };
+module.exports = { Comment };
 
 /*
    Mongoose => Do not use Arrow Function

@@ -20,7 +20,7 @@ const CategoryOptions = [
 ];
 
 function VideoUploadPage(props) {
-  const user = useSelector(state => state.user); // redux에 있는 store에서 user정보를 가져오는 것
+  const user = useSelector(state => state.user); // redux에 있는 state store에서 user정보를 가져오는 것
   const [VideoTitle, setVideoTitle] = useState('');
   const [Description, setDescription] = useState('');
   const [Private, setPrivate] = useState(0); // 0:private, 1:public
@@ -104,7 +104,7 @@ function VideoUploadPage(props) {
         message.success('success to upload');
         setTimeout(() => {
           props.history.push('/'); // go to landing page
-        }, 3000);
+        }, 1000);
       } else {
         alert('Fail to Video upload on the server');
       }

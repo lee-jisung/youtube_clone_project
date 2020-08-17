@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-//Database 저장 위한 Video model 가져옴
-// const { Video } = require('../models/Video');
-
 // auth 가져오기
 const { auth } = require('../middleware/auth');
 const multer = require('multer');
 const ffmpeg = require('fluent-ffmpeg');
-const Video = require('../models/Video');
+
+//Database 저장 위한 Video model 가져옴
+const { Video } = require('../models/Video');
+const { Subscriber } = require('../models/Subscriber');
 
 // multer => video를 저장하기 위한 것
 
@@ -73,7 +73,19 @@ router.get('/getVideos', (req, res) => {
     .populate('writer')
     .exec((err, videos) => {
       if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true, videos });
+      return res.status(200).json({ success: true, videos });
+    });
+});
+
+// landing page에서 video를 눌렀을 때 발생
+router.post('/getVideoDetail', (req, res) => {
+  //clinet에서 보낸 video id를 이용해서 DB에서 맞는 video 정보를 가져와
+  // 다시 client로 video 정보를 보냄
+  Video.findOne({ _id: req.body.videoId })
+    .populate('writer')
+    .exec((err, videoDetail) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).json({ success: true, videoDetail });
     });
 });
 
@@ -116,6 +128,30 @@ router.post('/thumbnail', (req, res) => {
       //'%b': input basename (filename w/o extension) ->extension을 제외한 filename
       filename: 'thumbnail-%b.png',
     });
+});
+
+// 구독하는 사람들의 비디오만 가져오기
+router.post('/getSubscriptionVideos', (req, res) => {
+  //로그인한 아이디를 가지고 구독하는 사람들 정보를 가져옴
+  Subscriber.find({ userFrom: req.body.userFrom }).exec(
+    (err, subscriberInfo) => {
+      if (err) return res.status(400).send(err);
+      let subscribedUser = [];
+      subscriberInfo.map((subscriber, index) => {
+        subscribedUser.push(subscriber.userTo);
+      });
+
+      //찾은 사람들의 모든 비디오를 가져옴
+      // subscribedUser에 들어있는 모든 id를 가지고 Video db에서 해당하는 정보를 다 가져옴
+      // mongoDB method => $in 사용
+      Video.find({ writer: { $in: subscribedUser } })
+        .populate('writer')
+        .exec((err, videos) => {
+          if (err) return res.status(400).send(err);
+          return res.status(200).json({ success: true, videos });
+        });
+    }
+  );
 });
 
 module.exports = router;
