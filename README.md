@@ -14,6 +14,8 @@ CORS policy에 의해 막힘(Cross-Origin Resource sharing) => 보안 issue
 
 => Proxy를 사용해서 해결
 
+---
+
 ## Redux
 
 redux store => object 형태의 data만 저장할 수 있음
@@ -22,8 +24,24 @@ Redux store에 promise / function의 형태를 저장하기 위해서
 
 redux-promise와 redux-thunk를 사용 (redux를 위한 middleware)
 
+---
+
 ## ffmpeg
 
 for generate thumbnail by video which user upload
 
-https://ai-creator.tistory.com/78
+- https://ai-creator.tistory.com/78
+
+---
+
+## Feedback
+
+### 수정할 점
+
+- subscribe했을 때, 재 로그인하면 subscribe한 기록이 풀림
+
+### 추가할 점
+
+- reply 삭제 기능 => 좋아요 버튼 클릭이 이미 되어있을때 등의 처리를 보고 개선하면 될듯 => server의 subscribe.js확인할 것
+
+-

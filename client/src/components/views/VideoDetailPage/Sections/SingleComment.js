@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Comment, Avatar, Button, Input } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
+import LikeDislikes from './LikeDislikes';
 
 const { TextArea } = Input;
 
@@ -40,6 +41,7 @@ function SingleComment(props) {
   };
 
   const actions = [
+    <LikeDislikes commentId={props.comment._id} userId={user.userData._id} />,
     <span onClick={onClickReplyOpen} key="comment-basic-reply-to">
       Reply to
     </span>,
